@@ -258,7 +258,7 @@ public class bodymode : MonoBehaviour
                 //Mode.SetText("counterleftpunchbefore");
             }
             //else if (Mathf.Abs(right_elbow_transform.localEulerAngles.z - elbow_center_angle) <= er)
-            else if (0 <= right_elbow_transform.localEulerAngles.z && right_elbow_transform.localEulerAngles.z < 60)
+            else if ((0 <= right_elbow_transform.localEulerAngles.z && right_elbow_transform.localEulerAngles.z < 60) && !(0 >= left_elbow_angle && left_elbow_angle > -70))
             {
 
 
@@ -277,7 +277,7 @@ public class bodymode : MonoBehaviour
 
             }
             //else if (Mathf.Abs(left_elbow_angle + elbow_center_angle) <= er)
-            else if (0 >= left_elbow_angle && left_elbow_angle > -70)
+            else if (!(0 <= right_elbow_transform.localEulerAngles.z && right_elbow_transform.localEulerAngles.z < 60) && (0 >= left_elbow_angle && left_elbow_angle > -70))
             {
 
 

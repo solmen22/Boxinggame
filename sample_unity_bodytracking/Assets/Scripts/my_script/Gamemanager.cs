@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class Gamemanager : MonoBehaviour
 {
     public GameObject Canvas;
     public GameObject levelCanvas;
-    AudioSource audioSource;
-    private void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
-    }
+   
+
+   
+   
     public void SelectlevelButton()
     {
      
@@ -47,6 +46,7 @@ public class Gamemanager : MonoBehaviour
 
     public void Guide()
     {
+        
         SceneManager.LoadScene("guidescene");
     }
 

@@ -34,13 +34,13 @@ public class hpscript : MonoBehaviour
                 Maxhealth = 50f;
                 break;
             case 2:
-                Maxhealth = 75f;
-                break;
-            case 3:
                 Maxhealth = 100f;
                 break;
-            case 4:
+            case 3:
                 Maxhealth = 125f;
+                break;
+            case 4:
+                Maxhealth = 150f;
                 break;
 
         }

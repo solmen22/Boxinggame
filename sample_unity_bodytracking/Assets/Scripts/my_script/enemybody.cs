@@ -76,6 +76,11 @@ public class enemybody : MonoBehaviour
     private int punch_false_counterprobability = 10;
     private float duration = 0.8f;
     /*予備動作の早さとか*/
+    private int counter_suc_punchprobability =70;
+    private int counter_false_punchprobability = 5;
+    private int counter_counter_probability = 10;
+    private bool ishell = false;
+   
     
 
 
@@ -96,7 +101,7 @@ public class enemybody : MonoBehaviour
                 counterprobability = 10;
                 punch_punchprobability = 5;
                 punch_suc_counterprobability = 5;
-                punch_false_counterprobability = 30;
+                punch_false_counterprobability = 60;
                 duration = 0.8f;
                 break;
             case 2:
@@ -108,12 +113,12 @@ public class enemybody : MonoBehaviour
                 duration = 0.8f;
                 break;
             case 3:
-                punchprobability = 15;
+                punchprobability = 25;
                 counterprobability = 5;
                 punch_punchprobability = 10;
-                punch_suc_counterprobability = 20;
+                punch_suc_counterprobability = 30;
                 punch_false_counterprobability = 10;
-                duration = 0.7f;
+                duration = 0.5f;
                 break;
             case 4:
                 punchprobability =35;
@@ -121,7 +126,8 @@ public class enemybody : MonoBehaviour
                 punch_punchprobability = 5;
                 punch_suc_counterprobability = 50;
                 punch_false_counterprobability = 0;
-                duration = 0.5f;
+                duration = 0.43f;
+                ishell = true;
                 break;
         }
             
@@ -176,7 +182,7 @@ public class enemybody : MonoBehaviour
 
         
         timer += Time.deltaTime;
-        if (((((timer > actionInterval) || enemy.IsLeftPunch || enemy.IsRightPunch) && count == 0) || ((timer > actionInterval) && count == -1)) && fina)
+        if (((((timer > actionInterval) || enemy.IsLeftPunch || enemy.IsRightPunch) && count == -1) || ((timer > actionInterval) && count == 0)) && fina)
         {
            
             if (hp1.currentRate>0 && hp2.currentRate >0 && gametimer.Timer > 0)
@@ -186,6 +192,17 @@ public class enemybody : MonoBehaviour
             
             timer = 0f;
         }
+
+        //if (((((timer > actionInterval) || enemy.IsLeftPunch || enemy.IsRightPunch) && count == 0) || ((timer > actionInterval) && count == -1)) && fina)
+        //{
+
+        //    if (hp1.currentRate > 0 && hp2.currentRate > 0 && gametimer.Timer > 0)
+        //    {
+        //        DecideNextAction();
+        //    }
+
+        //    timer = 0f;
+        //}
 
 
 
@@ -200,15 +217,14 @@ public class enemybody : MonoBehaviour
         {
             
             
-            
             if (0 <= rand && rand < punch_punchprobability)
             {
-                
+                fina = false;
                 StartCoroutine(RightPunch());
             }
             else if (punch_punchprobability <= rand && rand < (2 * punch_punchprobability))
             {
-                
+                fina = false;
                 StartCoroutine(LeftPunch());
             }
             else if ((2 * punch_punchprobability) <= rand && rand < (2 * punch_punchprobability + punch_suc_counterprobability))
@@ -251,12 +267,12 @@ public class enemybody : MonoBehaviour
             
             if (0 <= rand && rand < punch_punchprobability)
             {
-
+                fina = false;
                 StartCoroutine(RightPunch());
             }
             else if (punch_punchprobability <= rand && rand < (2 * punch_punchprobability))
             {
-
+                fina = false;
                 StartCoroutine(LeftPunch());
             }
             else if ((2 * punch_punchprobability) <= rand && rand < (2 * punch_punchprobability + punch_false_counterprobability))
@@ -294,17 +310,146 @@ public class enemybody : MonoBehaviour
                 count = -1;
             }
         }
+        else if (enemy.IsCounterLeft && ishell)
+        {
+            print("Left");
+            if (0 <= rand && rand < counter_counter_probability)
+            {
+                rightpunch = false;
+                leftpunch = false;
+                counterrightpunch = true;
+                counterleftpunch = false;
+                blocking = false;
+                counterrightpunching = true;
+                fina = false;
+                StartCoroutine(PunchPlayDelayedSound(0.4f));
+                animator.SetTrigger("counterrightpunch");
+            }
+            else if (counter_counter_probability <= rand && rand < 2 * counter_counter_probability)
+            {
+                rightpunch = false;
+                leftpunch = false;
+                counterrightpunch = false;
+                counterleftpunch = true;
+                blocking = false;
+                counterleftpunching = true;
+                fina = false;
+                StartCoroutine(PunchPlayDelayedSound(0.4f));
+                animator.SetTrigger("counterleftpunch");
+            }
+            else if (2 * counter_counter_probability <= rand && rand < 2 * counter_counter_probability + counter_suc_punchprobability)
+            {
+                //StartCoroutine(RightPunch_forcounter());
+                rightpunch = true;
+                leftpunch = false;
+                counterleftpunch = false;
+                counterrightpunch = false;
+                blocking = false;
+                rightpunching = true;
+                fina = false;
+
+                animator.SetTrigger("erightpunch");
+            }
+            else if (2 * counter_counter_probability + counter_suc_punchprobability <= rand && rand < 2 * counter_counter_probability + counter_suc_punchprobability + counter_false_punchprobability)
+            {
+                //StartCoroutine(LeftPunch_forcounter());
+                rightpunch = false;
+                leftpunch = true;
+                counterleftpunch = false;
+                counterrightpunch = false;
+                blocking = false;
+                leftpunching = true;
+                fina = false;
+
+
+                animator.SetTrigger("eleftpunch");
+            }
+            else
+            {
+                rightpunch = false;
+                leftpunch = false;
+                counterleftpunch = false;
+                counterrightpunch = false;
+                blocking = true;
+                count = -1;
+            }
+
+        }
+        else if (enemy.IsCounterRight && ishell)
+        {
+            print("right");
+            if (0 <= rand && rand < counter_counter_probability)
+            {
+                rightpunch = false;
+                leftpunch = false;
+                counterrightpunch = true;
+                counterleftpunch = false;
+                blocking = false;
+                counterrightpunching = true;
+                fina = false;
+                StartCoroutine(PunchPlayDelayedSound(0.4f));
+                animator.SetTrigger("counterrightpunch");
+            }
+            else if (counter_counter_probability <= rand && rand < 2 * counter_counter_probability)
+            {
+                rightpunch = false;
+                leftpunch = false;
+                counterrightpunch = false;
+                counterleftpunch = true;
+                blocking = false;
+                counterleftpunching = true;
+                fina = false;
+                StartCoroutine(PunchPlayDelayedSound(0.4f));
+                animator.SetTrigger("counterleftpunch");
+            }
+            else if (2 * counter_counter_probability <= rand && rand < 2 * counter_counter_probability + counter_suc_punchprobability)
+            {
+                //StartCoroutine(LeftPunch_forcounter());
+                rightpunch = false;
+                leftpunch = true;
+                counterleftpunch = false;
+                counterrightpunch = false;
+                blocking = false;
+                leftpunching = true;
+                fina = false;
+
+
+                animator.SetTrigger("eleftpunch");
+            }
+            else if (2 * counter_counter_probability + counter_suc_punchprobability <= rand && rand < 2 * counter_counter_probability + counter_suc_punchprobability + counter_false_punchprobability)
+            {
+                //StartCoroutine(RightPunch_forcounter());
+                rightpunch = true;
+                leftpunch = false;
+                counterleftpunch = false;
+                counterrightpunch = false;
+                blocking = false;
+                rightpunching = true;
+                fina = false;
+
+                animator.SetTrigger("erightpunch");
+            }
+            else
+            {
+                rightpunch = false;
+                leftpunch = false;
+                counterleftpunch = false;
+                counterrightpunch = false;
+                blocking = true;
+                count = -1;
+            }
+        }
         else
         {
 
             if (0 <= rand && rand < punchprobability)
             {
-
+                fina = false;
                 StartCoroutine(RightPunch());
             }
             else if (punchprobability <= rand && rand < (2 * punchprobability))
             {
-
+                fina = false;
                 StartCoroutine(LeftPunch());
             }
             else if ((2 * punchprobability) <= rand && rand < (2 * punchprobability + counterprobability))
@@ -315,7 +460,7 @@ public class enemybody : MonoBehaviour
                 counterleftpunch = false;
                 blocking = false;
                 counterrightpunching = true;
-                fina=false;
+                fina = false;
                 StartCoroutine(PunchPlayDelayedSound(0.4f));
                 animator.SetTrigger("counterrightpunch");
             }
@@ -446,6 +591,47 @@ public class enemybody : MonoBehaviour
         fina = false;
 
         StartCoroutine(PunchPlayDelayedSound(0.2f));
+        animator.SetTrigger("eleftpunch");
+    }
+
+    IEnumerator RightPunch_forcounter()
+    {
+
+
+
+        // 右手用パーティクル点滅
+        Vector3 warnPos = new Vector3(0f, 0f, 0f);
+        yield return StartCoroutine(BlinkParticle(rightwaring, warnPos, duration, 0.1f, true));
+
+
+        rightpunch = true;
+        leftpunch = false;
+        counterleftpunch = false;
+        counterrightpunch = false;
+        blocking = false;
+        rightpunching = true;
+        fina = false;
+
+        animator.SetTrigger("erightpunch");
+    }
+
+    IEnumerator LeftPunch_forcounter()
+    {
+
+        // 左手用パーティクル点滅
+        Vector3 warnPos = new Vector3(0f, 0f, 0f);
+        yield return StartCoroutine(BlinkParticle(leftwaring, warnPos, duration, 0.1f, false));
+
+
+        rightpunch = false;
+        leftpunch = true;
+        counterleftpunch = false;
+        counterrightpunch = false;
+        blocking = false;
+        leftpunching = true;
+        fina = false;
+
+       
         animator.SetTrigger("eleftpunch");
     }
 

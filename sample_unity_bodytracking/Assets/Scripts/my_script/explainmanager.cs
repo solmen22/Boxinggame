@@ -14,11 +14,9 @@ public class explainmanager : MonoBehaviour
     public GameObject Scene4;
     public GameObject Scene5;
     public GameObject Scene6;
-    AudioSource audioSource;
+ 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
         
     }
 
@@ -30,6 +28,7 @@ public class explainmanager : MonoBehaviour
 
     public void backgame()
     {
+       
         SceneManager.LoadScene("Start");
     }
 

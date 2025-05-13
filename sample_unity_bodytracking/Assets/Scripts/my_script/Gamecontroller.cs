@@ -24,6 +24,7 @@ public class Gamecontroller : MonoBehaviour
     public GameObject tracker;
     public GameObject Controller;
     public GameObject timeup;
+    public GameObject nextlevel;
     public hpscript enemyhp;
     public enemyhpscripthpscript playerhp;
     public GameTimer gameTimer;
@@ -40,9 +41,11 @@ public class Gamecontroller : MonoBehaviour
     public AudioSource Countdown;
     public AudioSource Bgm;
     
+    
 
     
     public bool Stop => stoping;
+    private int MAXLEVEL = 4;
     private bool stoping = false;
     private bool win = false;
     private bool lose = false;
@@ -54,6 +57,7 @@ public class Gamecontroller : MonoBehaviour
    
     private void Start()
     {
+        
         count = 0;
         Bgm.Play();
     }
@@ -81,6 +85,7 @@ public class Gamecontroller : MonoBehaviour
                 
                 if (count == 0)
                 {
+                    
                     Countdown.Stop();
                     AudioSource.PlayOneShot(Winapplause);
                     enemy.Play("knocked");
@@ -97,6 +102,7 @@ public class Gamecontroller : MonoBehaviour
                 player.Play("pknocked");
                 if (count == 0)
                 {
+                    
                     enemy.Play("win");
                     count++;
                 }
@@ -134,6 +140,7 @@ public class Gamecontroller : MonoBehaviour
                 player.Play("pwin");
                 if (count == 0)
                 {
+                    
                     Countdown.Stop();
                     AudioSource.PlayOneShot(Winapplause);
                     enemy.Play("knocked");
@@ -226,6 +233,22 @@ public class Gamecontroller : MonoBehaviour
         timeup.SetActive(false);
 
     }
+
+    public void NextLevel_Restart()
+    {
+        
+        int level = PlayerPrefs.GetInt("level", 4);
+        
+        if (level < MAXLEVEL)
+        {
+            level++;
+            PlayerPrefs.SetInt("level", level);
+            PlayerPrefs.Save();
+            SceneManager.LoadScene("trans");
+        }
+        
+    }
+       
     public void Restart()
     {
         SceneManager.LoadScene("trans");
@@ -256,9 +279,18 @@ public class Gamecontroller : MonoBehaviour
 
         }else if (win)
         {
-            
             Time.timeScale = 0f;
-            WinCanvas.SetActive(true);
+            int level = PlayerPrefs.GetInt("level", 4);
+            if (level < MAXLEVEL)
+            {
+                nextlevel.SetActive(true);
+            }
+            else
+            {
+                WinCanvas.SetActive(true);
+            }
+
+                
             Canvas.SetActive(false);
         }
 

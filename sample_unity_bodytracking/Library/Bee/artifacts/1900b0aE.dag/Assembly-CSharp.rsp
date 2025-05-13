@@ -407,6 +407,7 @@
 "Assets/Scripts/my_script/playerbody.cs"
 "Assets/Scripts/my_script/playerhpscript.cs"
 "Assets/Scripts/my_script/SoundManager.cs"
+"Assets/Scripts/my_script/startbgm.cs"
 "Assets/Scripts/my_script/startcontroller.cs"
 "Assets/Scripts/my_script/trans.cs"
 "Assets/Scripts/PuppetAvatar.cs"
